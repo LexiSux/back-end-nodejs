@@ -28,7 +28,7 @@ export const Login = async (username, password) => {
 }
 
 export const getAll = async (level) => {
-    return await USERSCH.find({ level: { $lte: level } }, '-password');
+    return await USERSCH.find({ level: { $lte: level } }, 'username name email phone');
 }
 
 export const insert = async (data, uid) => {
@@ -39,7 +39,7 @@ export const insert = async (data, uid) => {
 
     const password = makeHashPassword(pwd);
     const resp = await USERSCH.create({ ...less, username, password, createdBy: m.Types.ObjectId(uid) });
-    const { password: pwd2, ...result } = resp._doc;
+    const { password: pwd2, level, ...result } = resp._doc;
     return result;
 }
 

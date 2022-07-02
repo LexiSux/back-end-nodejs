@@ -7,7 +7,7 @@ let sch = new m.Schema({
     email:{type:String, default:''},
     level:Number,
     phone:{type:String, default:''},
-    createdBy:{type: Schema.Types.ObjectId, autopopulate:{ select: 'username name email' }, ref:'user'},
+    createdBy:{type: Schema.Types.ObjectId, autopopulate:{ select: 'username name email phone' }, ref:'user'},
 },
 {
     timestamps: true,
