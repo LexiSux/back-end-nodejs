@@ -4,7 +4,7 @@ dotenv.config();
 
 module.exports = {
     apps : [{
-      name   : process.env.NAME || "PortalTelex",
+      name   : process.env.NAME || "template-server",
       script : "npm",
       args   : "start",
       watch  : false,

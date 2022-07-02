@@ -1,10 +1,14 @@
 import { Router } from 'express';
-import ShcCtrls from './controller/user';
+import UserCtrls from './controller/users';
+import AuthController from './controller/auth';
+import { AuthMiddleware } from './controller/utils';
 
 const rtr = Router();
 
 
-// --------------- user -------------------
-rtr.use('/api/v1/user', ShcCtrls);
+// --------------- users -------------------
+rtr.use('/auth', AuthController);
+rtr.use('/api/v1', AuthMiddleware);
+rtr.use('/api/v1/users', UserCtrls);
 
 export default rtr;
