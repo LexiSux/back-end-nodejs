@@ -113,7 +113,7 @@ export const CtrlHandler=async(req, res, callback)=>{
             const {level:lvl, _id:uid} = res.locals.udata;
             let data=body;
             if(!!beforeSaveData && typeof beforeSaveData==='function'){
-                data = await beforeSaveData(data, lvl, uid);
+                data = await beforeSaveData(data, lvl, uid, req);
             }
             if(level===0 || ((level&lvl)>0)){
                 const {_id} = data;
