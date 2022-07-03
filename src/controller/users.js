@@ -4,6 +4,7 @@ import { getAll, insert, update, paging } from '../model/users';
 
 const rtr = Router();
 
+// get users
 rtr.get('/', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         const { level } = res.locals.udata;
@@ -11,6 +12,7 @@ rtr.get('/', (req, res) => {
     })
 });
 
+// paging
 rtr.get('/paging', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         const { level } = res.locals.udata;
@@ -20,6 +22,7 @@ rtr.get('/paging', (req, res) => {
     })
 });
 
+// add and update
 rtr.post('/', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         const { isCreate, _id: id, ...less } = body;

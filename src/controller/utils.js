@@ -2,6 +2,8 @@ import {decode} from '../library/signer';
 import m from 'mongoose';
 import {Router, Request, Response, NextFunction} from 'express';
 import {createModel} from '../model/utils';
+
+// auth middleware
 /**
  * 
  * @param {Request} req 
@@ -9,15 +11,12 @@ import {createModel} from '../model/utils';
  * @param {NextFunction} next 
  */
 export const AuthMiddleware=(req, res, next)=>{
-
     const authHeader=process.env.AUTHHEADER || 'srawung-token';
     const aToken=req.headers[authHeader] || req.query?.token;
     if(!aToken)
     { 
         res.json({error:403, message:"Forbidden!"});
-    }
-    else
-    {
+    } else {
         const start=new Date().getTime();
         res.set("before-token-timestamps", start);
         const uData=decode(aToken);
@@ -32,10 +31,14 @@ export const AuthMiddleware=(req, res, next)=>{
         else{
             res.locals.udata={...uData};
             res.locals.token=aToken;
+            console.log(uData)
+            console.log(aToken)
             next();
         }
     }
 }
+
+// api request controller 
 /**
  * 
  * @param {Request} req 
@@ -68,6 +71,7 @@ export const CtrlHandler=async(req, res, callback)=>{
     }
 }
 
+// crud component
 /**
  * 
  * @param {m.Model} schema 
@@ -84,6 +88,8 @@ export const CtrlHandler=async(req, res, callback)=>{
     beforeSendResult=false, defFilter={})=>{
     const rtr=Router();
     const {insert, reqPaging, update} = createModel(schema);
+
+    // get data
     rtr.get('/', (req, res)=>{
         CtrlHandler(req, res, async(body)=>{
             const {search, search2, page, perPage } = req.query;
@@ -108,6 +114,7 @@ export const CtrlHandler=async(req, res, callback)=>{
         })
     })
 
+    // add and update data
     rtr.post('/', (req, res)=>{
         CtrlHandler(req, res, async(body)=>{
             const {level:lvl, _id:uid} = res.locals.udata;

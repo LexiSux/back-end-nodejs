@@ -1,5 +1,6 @@
 import fileUpload from 'express-fileupload';
 
+// upload file express file upload
 export const expressUpload = async (app, express) => {
     app.use(express.static('static'));
     app.use(express.static('attachments'));

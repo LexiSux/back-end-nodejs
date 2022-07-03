@@ -3,6 +3,7 @@ import m from 'mongoose';
 
 dotenv.config();
 
+// connect api
 export const connectMongo = async (app) => {
     m.connect(process.env?.MONGOURI, {
         useNewUrlParser: true,

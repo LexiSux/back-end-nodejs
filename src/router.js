@@ -7,12 +7,12 @@ import PostCtrls from './controller/post';
 
 const rtr = Router();
 
-// --------------- users -------------------
+// --------------- router users -------------------
 rtr.use('/auth', AuthController);
 rtr.use('/api/v1', AuthMiddleware);
 rtr.use('/api/v1/users', UserCtrls);
 
-// --------------- post -------------------
+// --------------- router users -------------------
 rtr.use('/api/v1/posts', PostCtrls);
 
 export default rtr;

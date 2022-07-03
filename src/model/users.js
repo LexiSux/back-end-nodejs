@@ -9,6 +9,7 @@ const defaultEmail = 'admin@admin.com';
 const defaultPhone = '08511111111111';
 const defaultLevel = 0x1032;
 
+// make password hash
 const makeHashPassword = (password) => {
     const salt = process.env.SALT || 'SADHUWHENDMSABVHSACJASLWQPR';
     var hash = crypto.createHmac('sha256', salt);
@@ -16,6 +17,7 @@ const makeHashPassword = (password) => {
     return hash.digest('hex');
 }
 
+// login
 export const Login = async (username, password) => {
     const hashed = makeHashPassword(password);
     const uData = await USERSCH.findOne({ username, password: hashed }, '', { lean: true });
@@ -27,10 +29,12 @@ export const Login = async (username, password) => {
     return [signer({ ...less, level }), uData];
 }
 
+// get all users
 export const getAll = async (level) => {
     return await USERSCH.find({ level: { $lte: level } }, 'username name email phone');
 }
 
+// get add users
 export const insert = async (data, uid) => {
     const { password: pwd, username, ...less } = data;
 
@@ -43,6 +47,7 @@ export const insert = async (data, uid) => {
     return result;
 }
 
+// get update users
 export const update = async (data, id) => {
     const { password, username, ...less } = data;
 
@@ -64,23 +69,15 @@ export const update = async (data, id) => {
     }
 }
 
-export const updateProfile = async (userId, body) => {
-    const { name, email, phone } = body;
-    await USERSCH.updateOne({ _id: m.Types.ObjectId(userId) }, { $set: { name, email, phone } });
-    const usr = await USERSCH.findOne({ _id: m.Types.ObjectId(userId) }, '', { lean: true });
-    const { password, ...less } = usr;
-    return signer(less);
-}
-
+// change password
 export const changePassword = async (username, userId, password) => {
     const hashed = makeHashPassword(password);
-
     const correct = await USERSCH.findOne({ _id: m.Types.ObjectId(userId) });
-    console.log(correct)
     if (!correct) throw new Error('Wrong Current Password!');
     return await USERSCH.updateOne({ username }, { $set: { password: hashed } });
 }
 
+// create default users
 export const createDefaultUser = async (password) => {
     const exists = await USERSCH.findOne({ username: defaultUsername });
     if (!!exists) throw new Error('User Default Exists!');

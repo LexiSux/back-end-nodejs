@@ -1,11 +1,25 @@
 import { Router } from 'express';
 import { AuthMiddleware, CtrlHandler } from './utils';
 import { refreshToken } from '../library/signer';
-import { createLog } from '../library/utils';
+import { createLog } from '../library/activity_log';
 import { changePassword, createDefaultUser, Login, updateProfile } from '../model/users';
 
 const rtr = Router();
 
+rtr.use('/logout', AuthMiddleware);
+rtr.use('/refreshToken', AuthMiddleware);
+rtr.use('/changePassword', AuthMiddleware);
+rtr.use('/me', AuthMiddleware);
+
+// create default user
+rtr.post('/createDefaultUser', (req, res) => {
+    CtrlHandler(req, res, async (body) => {
+        const { password } = body;
+        return await createDefaultUser(password);
+    });
+});
+
+// login
 rtr.post('/login', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         const { app } = req.query;
@@ -32,48 +46,22 @@ rtr.post('/login', (req, res) => {
     });
 });
 
-rtr.post('/createDefaultUser', (req, res) => {
-    CtrlHandler(req, res, async (body) => {
-        const { password } = body;
-        return await createDefaultUser(password);
-    });
-});
-
-rtr.use('/logout', AuthMiddleware);
-rtr.use('/refreshToken', AuthMiddleware);
-rtr.use('/profile', AuthMiddleware);
-rtr.use('/changePassword', AuthMiddleware);
-rtr.use('/me', AuthMiddleware);
-
-rtr.get('/logout', (req, res) => {
-    CtrlHandler(req, res, async (body) => {
-        const { _id: user_id, username } = res.locals.udata;
-        createLog(user_id, `${username} Logout`, req);
-        return true;
-    });
-});
-
+// refresh token
 rtr.get('/refreshToken', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         return refreshToken(res.locals.token);
     });
 });
 
+
+// check token
 rtr.get('/me', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         return res.locals.udata;
     });
 });
 
-
-rtr.post('/profile', (req, res) => {
-    CtrlHandler(req, res, async (body) => {
-        const { _id, username } = res.locals.udata;
-        createLog(_id, `Update Profile for ${username}`, req);
-        return await updateProfile(_id, body);
-    });
-});
-
+// change password
 rtr.post('/changePassword', (req, res) => {
     CtrlHandler(req, res, async (body) => {
         const { username, _id } = res.locals.udata;
@@ -81,6 +69,15 @@ rtr.post('/changePassword', (req, res) => {
         const resp = await changePassword(username, _id, password);
         createLog(_id, `Change password for ${username}`, req);
         return password;
+    });
+});
+
+// logout
+rtr.get('/logout', (req, res) => {
+    CtrlHandler(req, res, async (body) => {
+        const { _id: user_id, username } = res.locals.udata;
+        createLog(user_id, `${username} Logout`, req);
+        return true;
     });
 });
 
