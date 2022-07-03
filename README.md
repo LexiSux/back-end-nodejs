@@ -6,6 +6,10 @@ template-back-end-nodejs
 
 ## Local Development
 ```
+$ npm install
+```
+
+```
 $ . generateKey.sh
 ```
 
