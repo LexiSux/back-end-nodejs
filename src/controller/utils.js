@@ -80,7 +80,7 @@ export const CtrlHandler=async(req, res, callback)=>{
  * @param {Object} defFilter
  * @returns {Router}
  */
- export const createCrudController=( schema, level=0, defSearch=[], beforeSaveData=false, sort={_id:-1}, beforeRead=false, 
+ export const createCrudController=( schema, level=0, defSearch=[], projection='', beforeSaveData=false, sort={_id:-1}, beforeRead=false, 
     beforeSendResult=false, defFilter={})=>{
     const rtr=Router();
     const {insert, reqPaging, update} = createModel(schema);
@@ -104,7 +104,7 @@ export const CtrlHandler=async(req, res, callback)=>{
                     filter={...filter, ...f};
                 }
             }
-            return await reqPaging(schema, page, perPage, filter, sort)
+            return await reqPaging(schema, page, perPage, filter, sort, projection)
         })
     })
 
