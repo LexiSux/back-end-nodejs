@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src --exec babel-node",
-    "build": "babel src --out-dir dist"
+    "start": "nodemon src --exec babel-node"
   },
   "repository": {
     "type": "git",
