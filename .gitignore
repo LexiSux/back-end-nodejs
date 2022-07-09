@@ -3,6 +3,7 @@ dist
 .vscode
 *.pem
 package-lock.json
+yarn.lock
 src/pptx/*
 env.js
 .DS_Store
